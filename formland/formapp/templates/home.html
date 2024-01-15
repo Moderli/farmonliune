@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form-online</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #66bb6a, #4caf50);
+            margin: 0;
+            padding: 0;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            color: #333;
+        }
+
+        h2 {
+            color: #00897b;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            margin-bottom: 8px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #00897b;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #00695c;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        img:hover {
+            transform: scale(1.1);
+        }
+
+        .machine-container {
+            border-top: 1px solid #ddd;
+            margin-top: 20px;
+            padding-top: 20px;
+        }
+
+        .user-profile {
+            margin-top: 10px;
+        }
+
+        p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Upload Machine for Rent</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="id_machine">Machine:</label>
+            {{ form.machine }}
+            <label for="id_price">Price:</label>
+            {{ form.price }}
+            <label for="id_description">Description:</label>
+            {{ form.description }}
+            <label for="id_pictures">Pictures:</label>
+            {{ form.pictures }}
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+
+    <div class='container'>
+        <h2>Available Machines</h2>
+        {% for machine in available_machines %}
+            <div class="machine-container">
+                <p><strong>{{ machine.machine }}</strong></p>
+                <p>ID: {{ machine.machine_id }}</p>
+                <p>Price: ${{ machine.price }}</p>
+                <p>Description: {{ machine.description }}</p>
+                <img src="{{ machine.pictures.url }}" alt="{{ machine.machine }}">
+                
+                {% for user_profile in user_profiles %}
+                    {% if user_profile.username == machine.username %}
+                        <div class="user-profile">
+                            <p>User Profile:</p>
+                            <p>Phone Number: {{ user_profile.phone_number }}</p>
+                            <p>Instagram: {{ user_profile.instagram }}</p>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
